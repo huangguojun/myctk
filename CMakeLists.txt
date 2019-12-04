@@ -568,9 +568,9 @@ if(CTK_APP_ctkCommandLineModuleExplorer)
   endforeach()
 endif()
 
-#ctk_app_option(ctkPluginBrowser
-#               "Build the DICOM example application" OFF
-#               CTK_ENABLE_PluginFramework AND CTK_BUILD_EXAMPLES)
+ctk_app_option(ctkPluginBrowser
+               "Build the DICOM example application" ON
+               CTK_ENABLE_PluginFramework AND CTK_BUILD_EXAMPLES)
 
 #ctk_app_option(ctkPluginGenerator
 #               "Build the DICOM example application" OFF
@@ -614,6 +614,7 @@ set(plugin_list
   org.commontk.eventadmin
   org.commontk.log
   org.commontk.metatype
+  org.commontk.helloctk
   )
 
 if(CTK_QT_VERSION VERSION_LESS "5")
