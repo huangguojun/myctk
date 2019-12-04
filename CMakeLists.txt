@@ -39,16 +39,6 @@ set(EXTERNAL_PROJECT_FILE_PREFIX "")
 include(ExternalProject)
 include(ctkMacroCheckExternalProjectDependency)
 
-#-----------------------------------------------------------------------------
-if(APPLE)
-  # Note: By setting CMAKE_OSX_* variables before any enable_language() or project() calls,
-  #       we ensure that the bitness will be properly detected.
-  include(ctkBlockSetCMakeOSXVariables)
-  mark_as_superbuild(
-    VARS CMAKE_OSX_ARCHITECTURES:STRING CMAKE_OSX_SYSROOT:PATH CMAKE_OSX_DEPLOYMENT_TARGET:STRING
-    ALL_PROJECTS
-    )
-endif()
 
 #-----------------------------------------------------------------------------
 project(CTK)
@@ -269,45 +259,6 @@ install(FILES
   COMPONENT Development
   )
 
-#-----------------------------------------------------------------------------
-# Testing
-#
-include(CTest)
-mark_as_advanced(BUILD_TESTING)
-mark_as_superbuild(BUILD_TESTING)
-
-if(BUILD_TESTING)
-  set(CPP_TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-  mark_as_advanced(TCL_TCLSH DART_ROOT)
-
-  include(CMake/ctkMacroSimpleTest.cmake)
-  include(CMake/ctkMacroSimpleTestWithData.cmake)
-
-  # Setup file for setting custom ctest vars
-  configure_file(
-    CMake/CTestCustom.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/CTestCustom.cmake
-    @ONLY
-    )
-
-  # Configuration for the CMake-generated test driver
-  set(CMAKE_TESTDRIVER_EXTRA_INCLUDES "#include <stdexcept>")
-  set(CMAKE_TESTDRIVER_BEFORE_TESTMAIN "
-    try
-      {")
-  set(CMAKE_TESTDRIVER_AFTER_TESTMAIN "    }
-      catch( std::exception & excp )
-        {
-        fprintf(stderr,\"%s\\n\",excp.what());
-        return EXIT_FAILURE;
-        }
-      catch( ... )
-        {
-        printf(\"Exception caught in the test driver\\n\");
-        return EXIT_FAILURE;
-        }
-      ")
-endif()
 
 #-----------------------------------------------------------------------------
 # QtTesting
@@ -948,9 +899,6 @@ set(CTK_DEPENDENCIES
   QtTesting
   )
 
-if(BUILD_TESTING)
-  list(APPEND CTK_DEPENDENCIES CTKData)
-endif()
 
 if(CTK_USE_KWSTYLE)
   list(APPEND CTK_DEPENDENCIES KWStyle)
@@ -987,9 +935,6 @@ if(CTK_SUPERBUILD)
   return()
 endif()
 
-if(BUILD_TESTING)
-  add_subdirectory(CMake/Testing)
-endif()
 
 #-----------------------------------------------------------------------------
 # Expand variables containing include and library directories for external projects
@@ -1132,9 +1077,6 @@ foreach(app ${CTK_APPS})
   endif()
 endforeach()
 
-if(BUILD_TESTING)
-  add_subdirectory(Applications/Testing)
-endif()
 
 
 #-----------------------------------------------------------------------------
