@@ -431,19 +431,19 @@ ctk_lib_option(Core
                "Build the Core library" ON)
 
 ctk_lib_option(PluginFramework
-               "Build the Plugin Framework" OFF
+               "Build the Plugin Framework" ON
                CTK_ENABLE_PluginFramework)
 
 ctk_lib_option(Widgets
-               "Build the Widgets library" OFF
+               "Build the Widgets library" ON
                CTK_ENABLE_Widgets OR (CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES) OR CTK_USE_QTTESTING)
 
 ctk_lib_option(DICOM/Core
-               "Build the DICOM Core library" OFF
+               "Build the DICOM Core library" ON
                CTK_ENABLE_DICOM OR (CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES))
 
 ctk_lib_option(DICOM/Widgets
-               "Build the DICOM Widgets library" OFF
+               "Build the DICOM Widgets library" ON
                CTK_ENABLE_DICOM AND CTK_ENABLE_Widgets OR (CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES))
 
 ctk_lib_option(ImageProcessing/ITK/Core
@@ -500,56 +500,58 @@ set(CTK_ENABLED_LIBS ${_enabled_libs} CACHE INTERNAL "" FORCE)
 # CTK Applications - Use ON or OFF to indicate if the application should be built by default
 #
 
-ctk_app_option(ctkDICOM
-               "Build the DICOM example application" OFF
-               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+ctk_app_option(ctkApp "Build the my example application" ON )
+
+#ctk_app_option(ctkDICOM
+#               "Build the DICOM example application" ON
+#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
 
-ctk_app_option(ctkDICOM2
-               "Build the new DICOM example application (experimental)" OFF
-               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkDICOM2
+#               "Build the new DICOM example application (experimental)" ON
+#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
-ctk_app_option(ctkDICOMIndexer
-               "Build the DICOM example application" OFF
-               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkDICOMIndexer
+#               "Build the DICOM example application" OFF
+#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
-ctk_app_option(ctkDICOMDemoSCU
-               "Build the DICOM example application" OFF
-               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkDICOMDemoSCU
+#               "Build the DICOM example application" OFF
+#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
-ctk_app_option(ctkDICOMQuery
-               "Build the DICOM example application" OFF
-               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkDICOMQuery
+#               "Build the DICOM example application" OFF
+#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
-ctk_app_option(ctkDICOMRetrieve
-               "Build the DICOM example application" OFF
-               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkDICOMRetrieve
+#               "Build the DICOM example application" OFF
+#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
-ctk_app_option(ctkDICOMQueryRetrieve
-               "Build the DICOM example application" OFF
-               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkDICOMQueryRetrieve
+#               "Build the DICOM example application" OFF
+#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
-ctk_app_option(ctkDICOMHost
-               "Build the DICOM application host example application" OFF
-               CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkDICOMHost
+#               "Build the DICOM application host example application" OFF
+#               CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES)
 
-ctk_app_option(ctkExampleHost
-               "Build the DICOM example application" OFF
-               CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkExampleHost
+#               "Build the DICOM example application" OFF
+#               CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES)
 
-ctk_app_option(ctkExampleHostedApp
-               "Build the DICOM example application" OFF
-               CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkExampleHostedApp
+#              "Build the DICOM example application" OFF
+#               CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES)
 
-if(CTK_QT_VERSION VERSION_LESS "5")
-ctk_app_option(ctkEventBusDemo
-               "Build the DICOM example application" OFF
-               CTK_ENABLE_PluginFramework AND CTK_BUILD_EXAMPLES)
-endif()
+#if(CTK_QT_VERSION VERSION_LESS "5")
+#ctk_app_option(ctkEventBusDemo
+#               "Build the DICOM example application" OFF
+#               CTK_ENABLE_PluginFramework AND CTK_BUILD_EXAMPLES)
+#endif()
 
-ctk_app_option(ctkCommandLineModuleExplorer
-               "Build the Command Line Module Explorer" OFF
-               CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkCommandLineModuleExplorer
+#               "Build the Command Line Module Explorer" OFF
+#               CTK_BUILD_EXAMPLES)
 
 # We use the CTKWidgets library together with the Qt Designer plug-in
 # in ctkCommandLineModuleExplorer, so enabling the options here.
@@ -566,31 +568,31 @@ if(CTK_APP_ctkCommandLineModuleExplorer)
   endforeach()
 endif()
 
-ctk_app_option(ctkPluginBrowser
-               "Build the DICOM example application" OFF
-               CTK_ENABLE_PluginFramework AND CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkPluginBrowser
+#               "Build the DICOM example application" OFF
+#               CTK_ENABLE_PluginFramework AND CTK_BUILD_EXAMPLES)
 
-ctk_app_option(ctkPluginGenerator
-               "Build the DICOM example application" OFF
-               CTK_ENABLE_PluginFramework AND CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkPluginGenerator
+#               "Build the DICOM example application" OFF
+#               CTK_ENABLE_PluginFramework AND CTK_BUILD_EXAMPLES)
 
-ctk_app_option(ctkDICOMObjectViewer
-               "Build the DICOM example application" OFF
-               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkDICOMObjectViewer
+#               "Build the DICOM example application" OFF
+#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
-ctk_app_option(ctkSimplePythonShell
-               "Build the DICOM example application" OFF
-               CTK_ENABLE_Python_Wrapping AND CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkSimplePythonShell
+#               "Build the DICOM example application" OFF
+#               CTK_ENABLE_Python_Wrapping AND CTK_BUILD_EXAMPLES)
 
-if(CTK_USE_QTTESTING AND CTK_QT_VERSION VERSION_LESS "5")
-  ctk_app_option(ctkQtTesting
-                "Build the ctkQtTesting example application" OFF
-                CTK_BUILD_EXAMPLES)
-endif()
+#if(CTK_USE_QTTESTING AND CTK_QT_VERSION VERSION_LESS "5")
+#  ctk_app_option(ctkQtTesting
+#                "Build the ctkQtTesting example application" OFF
+#                CTK_BUILD_EXAMPLES)
+#endif()
 
-ctk_app_option(ctkXnatTreeBrowser
-               "Build the XNAT Tree Browser application" OFF
-               CTK_BUILD_EXAMPLES)
+#ctk_app_option(ctkXnatTreeBrowser
+#               "Build the XNAT Tree Browser application" OFF
+#               CTK_BUILD_EXAMPLES)
 
 # Save the set of enabled apps in a cache file
 set(_enabled_apps)
@@ -711,7 +713,7 @@ if(_build_examples_logical_expr)
   list(REMOVE_AT _build_examples_logical_expr -1)
 endif()
 
-ctk_enable_option_raw(CTK_BUILD_EXAMPLES "Build examples for CTK components" OFF
+ctk_enable_option_raw(CTK_BUILD_EXAMPLES "Build examples for CTK components" ON
                   ${_build_examples_logical_expr})
 
 #-----------------------------------------------------------------------------
