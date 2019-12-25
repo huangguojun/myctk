@@ -1,33 +1,10 @@
-###########################################################################
 #
 #  Library:   CTK
-#
-#  Copyright (c) Kitware Inc.
-#
-#  Licensed under the Apache License, Version 2.0 (the "License");
-#  you may not use this file except in compliance with the License.
-#  You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0.txt
-#
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#  See the License for the specific language governing permissions and
-#  limitations under the License.
 #
 ###########################################################################
 
 cmake_minimum_required(VERSION 3.0)
 
-foreach(p
-  CMP0054 # CMake 3.1
-  CMP0020 # CMake 2.8.11
-  )
-  if(POLICY ${p})
-    cmake_policy(SET ${p} NEW)
-  endif()
-endforeach()
 
 #-----------------------------------------------------------------------------
 # Superbuild
@@ -44,12 +21,6 @@ include(ctkMacroCheckExternalProjectDependency)
 project(CTK)
 #-----------------------------------------------------------------------------
 
-#-----------------------------------------------------------------------------
-# Set defaults
-#
-if(NOT DEFINED CMAKE_MACOSX_RPATH)
-  set(CMAKE_MACOSX_RPATH 1)
-endif()
 
 #-----------------------------------------------------------------------------
 # Library mode: SHARED (default) or STATIC
@@ -267,28 +238,6 @@ option(CTK_USE_QTTESTING "Enable/Disable QtTesting" OFF)
 mark_as_advanced(CTK_USE_QTTESTING)
 mark_as_superbuild(CTK_USE_QTTESTING)
 
-#-----------------------------------------------------------------------------
-# Coverage
-#
-option(WITH_COVERAGE "Enable/Disable coverage" OFF)
-mark_as_advanced(WITH_COVERAGE)
-mark_as_superbuild(WITH_COVERAGE)
-
-#-----------------------------------------------------------------------------
-# Documentation
-#
-option(DOCUMENTATION_TARGET_IN_ALL "Include the custom target for building documentation in 'all'" OFF)
-mark_as_advanced(DOCUMENTATION_TARGET_IN_ALL)
-mark_as_superbuild(DOCUMENTATION_TARGET_IN_ALL)
-
-set(DOCUMENTATION_ARCHIVES_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
- CACHE PATH "Where documentation archives should be stored")
-mark_as_advanced(DOCUMENTATION_ARCHIVES_OUTPUT_DIRECTORY)
-mark_as_superbuild(DOCUMENTATION_ARCHIVES_OUTPUT_DIRECTORY)
-
-# Attempt to discover Doxygen so that DOXYGEN_EXECUTABLE is set to an appropriate default value
-find_package(Doxygen QUIET)
-mark_as_superbuild(DOXYGEN_EXECUTABLE)
 
 #-----------------------------------------------------------------------------
 # Additional CXX/C Flags
@@ -307,16 +256,6 @@ mark_as_superbuild(ADDITIONAL_CXX_FLAGS)
 
 ctkFunctionGetCompilerVisibilityFlags(VISIBILITY_CXX_FLAGS)
 
-#-----------------------------------------------------------------------------
-# Set coverage Flags
-#
-if(WITH_COVERAGE)
-  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    set(coverage_flags "-g -fprofile-arcs -ftest-coverage -O0 -DNDEBUG")
-    set(COVERAGE_CXX_FLAGS ${coverage_flags})
-    set(COVERAGE_C_FLAGS ${coverage_flags})
-  endif()
-endif()
 
 #-----------------------------------------------------------------------------
 # CTK C/CXX Flags
@@ -350,13 +289,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set(CTK_CXX_FLAGS "${cflags} -Woverloaded-virtual -Wold-style-cast -Wstrict-null-sentinel -Wsign-promo ${CTK_CXX_FLAGS}")
 endif()
 
-if(MSVC)
-  set(msvc_suppressed_warnings
-    "/wd4290" # C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
-  )
-  set(CTK_CXX_FLAGS "${CTK_CXX_FLAGS} ${msvc_suppressed_warnings} -DNOMINMAX")
-endif()
-
 #-----------------------------------------------------------------------------
 # Check if the linker will resolve symbols of underlinked libraries
 #
@@ -371,11 +303,6 @@ endif()
 # QT
 #
 ctkMacroSetupQt()
-
-# Update CTK_BASE_LIBRARIES with QT libraries
-if(QT4_FOUND)
-  set(CTK_BASE_LIBRARIES ${CTK_BASE_LIBRARIES} ${QT_LIBRARIES} CACHE INTERNAL "CTK base libraries" FORCE)
-endif()
 
 #-----------------------------------------------------------------------------
 # To make options show up in both CTK-SuperBuild and CTK regular build, let's add them
@@ -413,10 +340,6 @@ endif()
 mark_as_advanced(CMAKE_INSTALL_PREFIX)
 mark_as_advanced(DART_TESTING_TIMEOUT)
 
-# KWStyle
-option(CTK_USE_KWSTYLE     "Enable sourcecode-based style tests." OFF)
-mark_as_advanced(CTK_USE_KWSTYLE)
-mark_as_superbuild(CTK_USE_KWSTYLE)
 
 # Qt Designer Plugins
 option(CTK_BUILD_QTDESIGNER_PLUGINS "Build Qt Designer plugins" ON)
@@ -614,7 +537,7 @@ set(plugin_list
   org.commontk.eventadmin
   org.commontk.log
   org.commontk.metatype
-  org.commontk.helloctk
+  #org.commontk.helloctk
   )
 
 if(CTK_QT_VERSION VERSION_LESS "5")
@@ -672,39 +595,19 @@ endif()
 #-----------------------------------------------------------------------------
 # High-Level CTK options
 
-# The ctk_enable_option macro expects a logical expression after the first
-# three arguments. This expression should only contain build option names
-# which belong to leafs in the required dependency tree.
-
-# The CTK infrastructure for high-level DICOM support. This includes
-# DICOM indexing, networking, and GUI widgets.
-ctk_enable_option(DICOM "Enable default DICOM support" OFF
+ctk_enable_option(DICOM "Enable default DICOM support" ON
                   CTK_LIB_DICOM/Widgets)
 
-# The CTK infrastructure for building a DICOM Part 19 compliant application
-# host and/or hosted application. This will not enable any example plugins
-# or executables (enable CTK_ENABLE_EXAMPLES for that).
-ctk_enable_option(DICOMApplicationHosting "Enable DICOM Part 19 Application Hosting support" OFF
+ctk_enable_option(DICOMApplicationHosting "Enable DICOM Part 19 Application Hosting support" ON
                   CTK_PLUGIN_org.commontk.dah.host AND CTK_PLUGIN_org.commontk.dah.hostedapp)
 
-# The CTK Qt Widgets. This will enable the Qt Widget library only.
-# It might trigger the enabling of other widget libraries in combination
-# with other enabled options.
-ctk_enable_option(Widgets "Enable Qt Widget libraries" OFF
+ctk_enable_option(Widgets "Enable Qt Widget libraries" ON
                   CTK_LIB_Widgets)
 
-# The CTK Plugin Framework, a dynamic component system based on OSGi.
-# This will enable only the framework itself.
-ctk_enable_option(PluginFramework "Enable Plugin Framework" OFF
+ctk_enable_option(PluginFramework "Enable Plugin Framework" ON
                   CTK_LIB_PluginFramework)
 
-# The CTK Python Wrapping
-ctk_enable_option(Python_Wrapping "Wrap CTK classes using Qt meta-object system into Python language" OFF
-                  CTK_LIB_Scripting/Python/Core)
-mark_as_superbuild(CTK_ENABLE_Python_Wrapping)
 
-# Build examples
-# Create the logical expression containing the minium set of required options
 # for the CTK_BUILD_EXAMPLES option to be ON
 set(_build_examples_logical_expr)
 foreach(_app ${CTK_ENABLED_APPS})
@@ -721,31 +624,11 @@ ctk_enable_option_raw(CTK_BUILD_EXAMPLES "Build examples for CTK components" ON
 # Generate target_directories list - List of directory corresponding to the different
 # libraries, plugins and applications associated with the corresponding option name.
 #
-# The following FOREACH loops are used to:
-#   1) Update either CTK_LIBS_SUBDIRS, CTK_PLUGINS_SUBDIRS or CTK_APPS_SUBDIRS variables
-#
-# For CTK libraries, if the file Libs/<DIR>/<LIBNAME>/ctk_library_options.cmake exists,
-# in addition to 'CTK_LIB_<DIR>/<LIBNAME>' option, the following ones
-# will also be available in CMake configure menu:
-#  CTK_LIB_<DIR>/<LIBNAME>_OPT1  (set to OFF)
-#  CTK_LIB_<DIR>/<LIBNAME>_OPT2  (set to ON)
-#
-# The file Libs/<DIR>/<LIBNAME>/ctk_library_options.cmake should look like:
-#
-#     set(ctk_library_options
-#       OPT1:OFF
-#       OPT2:ON
 #       )
 
 
 # Create list of directories corresponding to the enabled targets
 set(target_directories)
-
-# Setup testing environment before Libs are added by simulating
-# the use of 'ctk_lib_option' for CTKTesting library
-set(CTK_LIB_Testing TRUE)
-list(APPEND CTK_LIBS Testing)
-list(APPEND target_directories "${CMAKE_CURRENT_SOURCE_DIR}/Libs/Testing^^CTK_LIB_Testing")
 
 foreach(lib ${CTK_LIBS})
   if(CTK_LIB_${lib})
@@ -766,14 +649,6 @@ foreach(app ${CTK_APPS})
   list(APPEND target_directories "${CMAKE_CURRENT_SOURCE_DIR}/Applications/${app}^^CTK_APP_${app}")
 endforeach()
 
-# Emulate the use of 'ctk_lib_option' for CTKQtTesting library
-set(CTK_LIB_QtTesting ${CTK_USE_QTTESTING})
-if(CTK_USE_QTTESTING)
-  list(APPEND CTK_LIBS QtTesting)
-  list(APPEND target_directories "${CMAKE_CURRENT_SOURCE_DIR}/Libs/QtTesting^^CTK_LIB_QtTesting")
-endif()
-
-#message(STATUS target_directories:${target_directories})
 
 #-----------------------------------------------------------------------------
 # Compile DGraph - An application allowing to check for cycle in DAG and also obtain the
@@ -810,80 +685,12 @@ if(CTK_LIB_Visualization/VTK/Widgets)
 endif()
 
 #-----------------------------------------------------------------------------
-# Let's make sure the enabled/disabled libraries, plugins or applications are coherent
-#
+
 ctkFunctionGenerateDGraphInput(${CTK_BINARY_DIR} "${target_directories}")
 ctkFunctionGenerateDGraphInput(${CTK_BINARY_DIR} "${target_directories}" WITH_EXTERNALS)
 ctkMacroValidateBuildOptions("${CTK_BINARY_DIR}" "${DGraph_EXECUTABLE}" "${target_directories}")
 
-#-----------------------------------------------------------------------------
-# CTK Python wrapping
-# Enable CTK_LIB_Scripting/Python/Core if CTK_ENABLE_Python_Wrapping is ON
-#
-set(CTK_WRAP_PYTHONQT_LIGHT ${CTK_ENABLE_Python_Wrapping})
 
-set(logical_expr CTK_WRAP_PYTHONQT_LIGHT)
-if((${logical_expr}) AND NOT CTK_LIB_Scripting/Python/Core)
-  set(CTK_LIB_Scripting/Python/Core ON CACHE BOOL "Build the Python Core library" FORCE)
-  set(enabling_msg)
-  ctk_option_logical_expression_to_message(enabling_msg "${logical_expr}")
-  message("Enabling [CTK_LIB_Scripting/Python/Core] because of [${enabling_msg}] evaluates to True")
-endif()
-
-set(logical_expr CTK_LIB_Scripting/Python/Core AND CTK_LIB_Scripting/Python/Core_PYTHONQT_USE_VTK)
-if(${logical_expr} AND NOT CTK_LIB_Visualization/VTK/Core)
-  set(CTK_LIB_Visualization/VTK/Core ON CACHE BOOL "Build the VTK Core library" FORCE)
-  set(enabling_msg)
-  ctk_option_logical_expression_to_message(enabling_msg "${logical_expr}")
-  message("Enabling [CTK_LIB_Visualization/VTK/Core] because of [${enabling_msg}] evaluates to True")
-endif()
-
-# Check if dependencies are satisfied
-if(CTK_LIB_Scripting/Python/Core)
-  if(NOT PYTHONINTERP_FOUND)
-    find_package(PythonInterp)
-    if(NOT PYTHONINTERP_FOUND)
-      message(FATAL_ERROR "PYTHON_EXECUTABLE variable should be set to build CTK_LIB_Scripting/Python")
-    endif()
-  endif()
-  if(NOT PYTHONLIBS_FOUND)
-    find_package(PythonLibs)
-    if(NOT PYTHONLIBS_FOUND)
-      message(FATAL_ERROR "PYTHON_LIBRARIES and PYTHON_INCLUDE_DIRS should be set to build CTK_LIB_Scripting/Python")
-    endif()
-  endif()
-endif()
-
-#-----------------------------------------------------------------------------
-# DGraph
-#
-
-# Generate DGraph input file expected by DGraph
-ctkFunctionGenerateDGraphInput(${CTK_BINARY_DIR} "${target_directories}" WITH_OPTION)
-
-# Obtain list of target ordered topologically
-ctkMacroSetPaths("${QT_INSTALLED_LIBRARY_DIR}")
-execute_process(
-  COMMAND "${DGraph_EXECUTABLE}" "${CTK_BINARY_DIR}/DGraphInput.txt"
-  WORKING_DIRECTORY ${CTK_BINARY_DIR}
-  RESULT_VARIABLE RESULT_VAR
-  OUTPUT_VARIABLE CTEST_PROJECT_SUBPROJECTS_OUTPUT
-  ERROR_VARIABLE error
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-if(RESULT_VAR)
-  message(FATAL_ERROR "Failed to obtain list of target ordered topologically.\n${RESULT_VAR}\n${CTK_BINARY_DIR}\n${error}")
-endif()
-
-# Convert 'CTEST_PROJECT_SUBPROJECTS_OUTPUT' to a list
-string(REPLACE " " "\\;" CTEST_PROJECT_SUBPROJECTS "${CTEST_PROJECT_SUBPROJECTS_OUTPUT}")
-set(CTEST_PROJECT_SUBPROJECTS ${CTEST_PROJECT_SUBPROJECTS})
-
-# If the list of subproject is empty, let's at least build CTKCore
-list(LENGTH CTEST_PROJECT_SUBPROJECTS subproject_count)
-if(subproject_count EQUAL 0)
-  set(CTEST_PROJECT_SUBPROJECTS CTKCore)
-endif()
 
 #-----------------------------------------------------------------------------
 # CTK dependencies - Projects should be TOPOLOGICALLY ordered
@@ -903,9 +710,6 @@ set(CTK_DEPENDENCIES
   )
 
 
-if(CTK_USE_KWSTYLE)
-  list(APPEND CTK_DEPENDENCIES KWStyle)
-endif()
 
 #-----------------------------------------------------------------------------
 # Check out the ExternalProjectsContrib repository
@@ -1087,21 +891,6 @@ endforeach()
 #
 #add_subdirectory(Testing)
 #add_subdirectory(Examples)
-
-
-#-----------------------------------------------------------------------------
-# Style Checking configuration
-#
-include(Utilities/KWStyle/KWStyle.cmake)
-
-#---------------------------------------------------------------------------
-# Documentation
-#
 add_subdirectory( Documentation )
-
-#-----------------------------------------------------------------------------
-# The commands in this directory are intended to be executed as
-# the end of the whole configuration process, as a "last step".
-# This directory is typically the last SUBDIRS in the main CMakeLists.txt.
 add_subdirectory(CMake/LastConfigureStep)
 
