@@ -231,13 +231,6 @@ install(FILES
   )
 
 
-#-----------------------------------------------------------------------------
-# QtTesting
-#
-option(CTK_USE_QTTESTING "Enable/Disable QtTesting" OFF)
-mark_as_advanced(CTK_USE_QTTESTING)
-mark_as_superbuild(CTK_USE_QTTESTING)
-
 
 #-----------------------------------------------------------------------------
 # Additional CXX/C Flags
