@@ -419,46 +419,46 @@ set(CTK_ENABLED_LIBS ${_enabled_libs} CACHE INTERNAL "" FORCE)
 
 ctk_app_option(ctkApp "Build the my example application" ON )
 
-#ctk_app_option(ctkDICOM
-#               "Build the DICOM example application" ON
-#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+ctk_app_option(ctkDICOM
+               "Build the DICOM example application" ON
+               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
 
-#ctk_app_option(ctkDICOM2
-#               "Build the new DICOM example application (experimental)" ON
-#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+ctk_app_option(ctkDICOM2
+               "Build the new DICOM example application (experimental)" ON
+               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
-#ctk_app_option(ctkDICOMIndexer
-#               "Build the DICOM example application" OFF
-#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+ctk_app_option(ctkDICOMIndexer
+               "Build the DICOM example application" ON
+               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
-#ctk_app_option(ctkDICOMDemoSCU
-#               "Build the DICOM example application" OFF
-#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+ctk_app_option(ctkDICOMDemoSCU
+               "Build the DICOM example application" ON
+               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
-#ctk_app_option(ctkDICOMQuery
-#               "Build the DICOM example application" OFF
-#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+ctk_app_option(ctkDICOMQuery
+               "Build the DICOM example application" ON
+               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
-#ctk_app_option(ctkDICOMRetrieve
-#               "Build the DICOM example application" OFF
-#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+ctk_app_option(ctkDICOMRetrieve
+               "Build the DICOM example application" ON
+               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
-#ctk_app_option(ctkDICOMQueryRetrieve
-#               "Build the DICOM example application" OFF
-#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+ctk_app_option(ctkDICOMQueryRetrieve
+               "Build the DICOM example application" ON
+               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
-#ctk_app_option(ctkDICOMHost
-#               "Build the DICOM application host example application" OFF
-#               CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES)
+ctk_app_option(ctkDICOMHost
+               "Build the DICOM application host example application" ON
+               CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES)
 
-#ctk_app_option(ctkExampleHost
-#               "Build the DICOM example application" OFF
-#               CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES)
+ctk_app_option(ctkExampleHost
+               "Build the DICOM example application" ON
+               CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES)
 
-#ctk_app_option(ctkExampleHostedApp
-#              "Build the DICOM example application" OFF
-#               CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES)
+ctk_app_option(ctkExampleHostedApp
+              "Build the DICOM example application" ON
+               CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES)
 
 #if(CTK_QT_VERSION VERSION_LESS "5")
 #ctk_app_option(ctkEventBusDemo
@@ -489,27 +489,14 @@ ctk_app_option(ctkPluginBrowser
                "Build the DICOM example application" ON
                CTK_ENABLE_PluginFramework AND CTK_BUILD_EXAMPLES)
 
-#ctk_app_option(ctkPluginGenerator
-#               "Build the DICOM example application" OFF
-#               CTK_ENABLE_PluginFramework AND CTK_BUILD_EXAMPLES)
+ctk_app_option(ctkPluginGenerator
+               "Build the DICOM example application" OFF
+               CTK_ENABLE_PluginFramework AND CTK_BUILD_EXAMPLES)
 
-#ctk_app_option(ctkDICOMObjectViewer
-#               "Build the DICOM example application" OFF
-#               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
+ctk_app_option(ctkDICOMObjectViewer
+               "Build the DICOM example application" OFF
+               CTK_ENABLE_DICOM AND CTK_BUILD_EXAMPLES)
 
-#ctk_app_option(ctkSimplePythonShell
-#               "Build the DICOM example application" OFF
-#               CTK_ENABLE_Python_Wrapping AND CTK_BUILD_EXAMPLES)
-
-#if(CTK_USE_QTTESTING AND CTK_QT_VERSION VERSION_LESS "5")
-#  ctk_app_option(ctkQtTesting
-#                "Build the ctkQtTesting example application" OFF
-#                CTK_BUILD_EXAMPLES)
-#endif()
-
-#ctk_app_option(ctkXnatTreeBrowser
-#               "Build the XNAT Tree Browser application" OFF
-#               CTK_BUILD_EXAMPLES)
 
 # Save the set of enabled apps in a cache file
 set(_enabled_apps)
@@ -534,45 +521,36 @@ set(plugin_list
   #org.commontk.helloctk
   )
 
-if(CTK_QT_VERSION VERSION_LESS "5")
-  list(APPEND plugin_list org.commontk.log4qt)
-endif()
 
 foreach(_plugin ${plugin_list})
-  ctk_plugin_option(${_plugin} "Build the ${_plugin} plugin." OFF)
+  ctk_plugin_option(${_plugin} "Build the ${_plugin} plugin." ON)
 endforeach()
 
 # Plug-ins related to the PluginGenerator application
-ctk_plugin_option(org.commontk.plugingenerator.core "Build the org.commontk.plugingenerator.core plugin." OFF)
+ctk_plugin_option(org.commontk.plugingenerator.core "Build the org.commontk.plugingenerator.core plugin." ON)
 ctk_plugin_option(org.commontk.plugingenerator.ui
-                  "Build the org.commontk.plugingenerator.ui plugin." OFF
+                  "Build the org.commontk.plugingenerator.ui plugin." ON
                   CTK_APP_ctkPluginGenerator)
 
 # Plug-ins related to DICOM WG23 (Application Hosting)
-ctk_plugin_option(org.commontk.dah.core "Build the org.commontk.dah.core plugin." OFF)
-ctk_plugin_option(org.commontk.dah.hostedapp "Build the org.commontk.dah.hostedapp plugin." OFF
+ctk_plugin_option(org.commontk.dah.core "Build the org.commontk.dah.core plugin." ON)
+ctk_plugin_option(org.commontk.dah.hostedapp "Build the org.commontk.dah.hostedapp plugin." ON
                   CTK_ENABLE_DICOMApplicationHosting)
-ctk_plugin_option(org.commontk.dah.host "Build the org.commontk.dah.host plugin." OFF
+ctk_plugin_option(org.commontk.dah.host "Build the org.commontk.dah.host plugin." ON
                   CTK_ENABLE_DICOMApplicationHosting)
 
 ctk_plugin_option(org.commontk.dah.exampleapp
-                  "Build the org.commontk.dah.exampleapp plugin." OFF
+                  "Build the org.commontk.dah.exampleapp plugin." ON
                   CTK_APP_ctkExampleHostedApp)
 
 ctk_plugin_option(org.commontk.dah.cmdlinemoduleapp
-                  "Build the org.commontk.dah.cmdlinemoduleapp plugin." OFF
+                  "Build the org.commontk.dah.cmdlinemoduleapp plugin." ON
                   CTK_APP_ctkCommandLineModuleApp)
 
 ctk_plugin_option(org.commontk.dah.examplehost
-                  "Build the org.commontk.dah.examplehost plugin." OFF
+                  "Build the org.commontk.dah.examplehost plugin." ON
                   CTK_APP_ctkExampleHost)
 
-# Plug-ins related to the EventBus demo application
-if(CTK_QT_VERSION VERSION_LESS "5")
-ctk_plugin_option(org.commontk.eventbus
-                  "Build the org.commontk.eventbus plugin." OFF
-                  CTK_APP_ctkEventBusDemo)
-endif()
 
 # Add the PluginsContrib repo to the build system
 option(CTK_USE_CONTRIBUTED_PLUGINS OFF "Use CTK plug-ins from the PluginsContrib repository")
@@ -646,43 +624,10 @@ endforeach()
 
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
-# Compile DGraph - An application allowing to check for cycle in DAG and also obtain the
-# topological order.
-try_compile(RESULT_VAR ${CTK_BINARY_DIR}/Utilities/DGraph ${CTK_SOURCE_DIR}/Utilities/DGraph
-              DGraph
-              CMAKE_FLAGS
-                -DCMAKE_OSX_ARCHITECTURES:STRING=${CMAKE_OSX_ARCHITECTURES}
-                -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=${CMAKE_OSX_DEPLOYMENT_TARGET}
-                -DCMAKE_OSX_SYSROOT:STRING=${CMAKE_OSX_SYSROOT}
-                -DCMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
-              OUTPUT_VARIABLE output)
-if(NOT RESULT_VAR)
-  message(FATAL_ERROR "Failed to compile DGraph application.\n${output}")
-endif()
 find_program(DGraph_EXECUTABLE DGraph
   "${CTK_BINARY_DIR}/Utilities/DGraph/"
-  "${CTK_BINARY_DIR}/Utilities/DGraph/bin/"
-  "${CTK_BINARY_DIR}/Utilities/DGraph/Debug/"
-  "${CTK_BINARY_DIR}/Utilities/DGraph/Release/")
+  )
 mark_as_advanced(DGraph_EXECUTABLE)
-
-# Set optional dependencies not captured in 'target_libraries.cmake' files.
-if(CTK_LIB_Scripting/Python/Core AND CTK_LIB_Scripting/Python/Core_PYTHONQT_USE_VTK)
-  set(ctkSimplePythonShell_OPTIONAL_DEPENDENCIES CTKVisualizationVTKCore VTK_LIBRARIES)
-endif()
-
-set(CTKQtTesting_OPTIONAL_DEPENDENCIES)
-if(CTK_LIB_Widgets)
-  list(APPEND CTKQtTesting_OPTIONAL_DEPENDENCIES CTKWidgets)
-endif()
-if(CTK_LIB_Visualization/VTK/Widgets)
-  list(APPEND CTKQtTesting_OPTIONAL_DEPENDENCIES CTKVisualizationVTKWidgets)
-endif()
-
-#-----------------------------------------------------------------------------
-
-ctkFunctionGenerateDGraphInput(${CTK_BINARY_DIR} "${target_directories}")
-ctkFunctionGenerateDGraphInput(${CTK_BINARY_DIR} "${target_directories}" WITH_EXTERNALS)
 ctkMacroValidateBuildOptions("${CTK_BINARY_DIR}" "${DGraph_EXECUTABLE}" "${target_directories}")
 
 
@@ -690,7 +635,7 @@ ctkMacroValidateBuildOptions("${CTK_BINARY_DIR}" "${DGraph_EXECUTABLE}" "${targe
 # CTK dependencies - Projects should be TOPOLOGICALLY ordered
 #-----------------------------------------------------------------------------
 set(CTK_DEPENDENCIES
-  Log4Qt
+#  Log4Qt
 #  VTK
 #  PythonQt
 #  DCMTK
@@ -705,7 +650,6 @@ set(CTK_DEPENDENCIES
 
 
 
-#-----------------------------------------------------------------------------
 # Check out the ExternalProjectsContrib repository
 if(CTK_USE_CONTRIBUTED_PLUGINS)
   if(CTK_SUPERBUILD)
@@ -729,8 +673,6 @@ include(CMake/ctkBlockCheckDependencies.cmake)
 
 #-----------------------------------------------------------------------------
 # Superbuild script
-#
-
 
 if(CTK_SUPERBUILD)
   include("${CMAKE_CURRENT_SOURCE_DIR}/SuperBuild.cmake")
@@ -891,8 +833,6 @@ endforeach()
 #-----------------------------------------------------------------------------
 # Add general purpose subdirectories
 #
-#add_subdirectory(Testing)
-#add_subdirectory(Examples)
 add_subdirectory( Documentation )
 add_subdirectory(CMake/LastConfigureStep)
 
