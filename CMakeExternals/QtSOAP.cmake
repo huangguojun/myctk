@@ -29,16 +29,8 @@ if(NOT DEFINED QtSOAP_DIR)
     set(revision_tag ${${proj}_REVISION_TAG})
   endif()
 
-  set(location_args )
-  if(${proj}_URL)
-    set(location_args URL ${${proj}_URL})
-  elseif(${proj}_GIT_REPOSITORY)
-    set(location_args GIT_REPOSITORY ${${proj}_GIT_REPOSITORY}
+  set(location_args GIT_REPOSITORY "https://github.com/commontk/QtSOAP.git"
                       GIT_TAG ${revision_tag})
-  else()
-    set(location_args GIT_REPOSITORY "${EP_GIT_PROTOCOL}://github.com/commontk/QtSOAP.git"
-                      GIT_TAG ${revision_tag})
-  endif()
 
   set(ep_cache_args)
   if(CTK_QT_VERSION VERSION_LESS "5")

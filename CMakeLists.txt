@@ -306,25 +306,26 @@ ctkMacroSetupQt()
 # Special "BUILD ALL" options
 
 # Build all CTK plug-ins
-option(CTK_BUILD_ALL_PLUGINS "Build all CTK plug-ins" OFF)
+option(CTK_BUILD_ALL_PLUGINS "Build all CTK plug-ins" ON)
 mark_as_superbuild(CTK_BUILD_ALL_PLUGINS)
 
 # Build all CTK libraries
-option(CTK_BUILD_ALL_LIBRARIES "Build all CTK libraries" OFF)
+option(CTK_BUILD_ALL_LIBRARIES "Build all CTK libraries" ON)
 mark_as_superbuild(CTK_BUILD_ALL_LIBRARIES)
 
 # Build all CTK applications
-option(CTK_BUILD_ALL_APPS "Build all CTK applications" OFF)
+option(CTK_BUILD_ALL_APPS "Build all CTK applications" ON)
 mark_as_superbuild(CTK_BUILD_ALL_APPS)
 
 # Build everything
-option(CTK_BUILD_ALL "Build everything in CTK" OFF)
+option(CTK_BUILD_ALL "Build everything in CTK" ON)
 mark_as_superbuild(CTK_BUILD_ALL)
 if(CTK_BUILD_ALL)
   set(CTK_BUILD_ALL_PLUGINS 1)
   set(CTK_BUILD_ALL_LIBRARIES 1)
   set(CTK_BUILD_ALL_APPS 1)
 endif()
+
 
 #-----------------------------------------------------------------------------
 # Other options
@@ -362,27 +363,27 @@ ctk_lib_option(DICOM/Widgets
                "Build the DICOM Widgets library" ON
                CTK_ENABLE_DICOM AND CTK_ENABLE_Widgets OR (CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES))
 
-ctk_lib_option(ImageProcessing/ITK/Core
-               "Build the ITK Core library" OFF)
+#ctk_lib_option(ImageProcessing/ITK/Core
+#               "Build the ITK Core library" OFF)
 
-ctk_lib_option(Scripting/Python/Core
-               "Build the Python Core library" OFF
-               CTK_ENABLE_Python_Wrapping)
+#ctk_lib_option(Scripting/Python/Core
+#               "Build the Python Core library" OFF
+#               CTK_ENABLE_Python_Wrapping)
 
-ctk_lib_option(Scripting/Python/Widgets
-               "Build the Python Widgets library" OFF)
+#ctk_lib_option(Scripting/Python/Widgets
+#               "Build the Python Widgets library" OFF)
 
-ctk_lib_option(Visualization/VTK/Core
-               "Build the VTK Core library" OFF)
+#ctk_lib_option(Visualization/VTK/Core
+#              "Build the VTK Core library" OFF)
 
-ctk_lib_option(Visualization/VTK/Widgets
-               "Build the VTK Widgets library" OFF)
+#ctk_lib_option(Visualization/VTK/Widgets
+#               "Build the VTK Widgets library" OFF)
 
 ctk_lib_option(CommandLineModules/Core
                "Build the Command Line Module core library" OFF)
 
-ctk_lib_option(CommandLineModules/Frontend/QtWebKit
-               "Build the QtWebKit based Command Line Module front-end" OFF)
+#ctk_lib_option(CommandLineModules/Frontend/QtWebKit
+#               "Build the QtWebKit based Command Line Module front-end" OFF)
 
 ctk_lib_option(CommandLineModules/Frontend/QtGui
                "Build the QtGui based Command Line Module front-end" OFF)
@@ -396,11 +397,11 @@ ctk_lib_option(CommandLineModules/Backend/LocalProcess
 ctk_lib_option(CommandLineModules/Backend/FunctionPointer
                "Build the Command Line Module back-end for function pointers" OFF)
 
-ctk_lib_option(XNAT/Core
-               "Build the XNAT Core library" OFF)
+#ctk_lib_option(XNAT/Core
+#               "Build the XNAT Core library" OFF)
 
-ctk_lib_option(XNAT/Widgets
-               "Build the XNAT Widgets library" OFF)
+#ctk_lib_option(XNAT/Widgets
+#               "Build the XNAT Widgets library" OFF)
 
 # Save enabled CTK libraries in the cache to ensure expected player and translator
 # are enabled in "Libs/QtTesting".
@@ -644,6 +645,7 @@ endforeach()
 
 
 #-----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Compile DGraph - An application allowing to check for cycle in DAG and also obtain the
 # topological order.
 try_compile(RESULT_VAR ${CTK_BINARY_DIR}/Utilities/DGraph ${CTK_SOURCE_DIR}/Utilities/DGraph
@@ -684,22 +686,21 @@ ctkFunctionGenerateDGraphInput(${CTK_BINARY_DIR} "${target_directories}" WITH_EX
 ctkMacroValidateBuildOptions("${CTK_BINARY_DIR}" "${DGraph_EXECUTABLE}" "${target_directories}")
 
 
-
 #-----------------------------------------------------------------------------
 # CTK dependencies - Projects should be TOPOLOGICALLY ordered
 #-----------------------------------------------------------------------------
 set(CTK_DEPENDENCIES
   Log4Qt
-  VTK
-  PythonQt
-  DCMTK
-  ZMQ
-  QtSOAP
-  qxmlrpc
-  qRestAPI
-  OpenIGTLink
-  ITK
-  QtTesting
+#  VTK
+#  PythonQt
+#  DCMTK
+#  ZMQ
+   QtSOAP
+#  qxmlrpc
+#  qRestAPI
+#  OpenIGTLink
+#  ITK
+#  QtTesting
   )
 
 
@@ -730,10 +731,13 @@ include(CMake/ctkBlockCheckDependencies.cmake)
 # Superbuild script
 #
 
+
 if(CTK_SUPERBUILD)
   include("${CMAKE_CURRENT_SOURCE_DIR}/SuperBuild.cmake")
   return()
 endif()
+
+find_package(DCMTK REQUIRED)
 
 
 #-----------------------------------------------------------------------------
@@ -744,7 +748,7 @@ foreach(_external_target ${EXTERNAL_TARGETS})
   if(_package_name)
     superbuild_is_external_project_includable(${_package_name} required)
     if(required)
-      #message("Calling find_package(${_package_name})")
+      message("Calling find_package(${_package_name})")
       find_package(${_package_name} REQUIRED)
     endif()
   endif()
@@ -842,6 +846,11 @@ set(CTK_EXPORT_HEADER_TEMPLATE "${CTK_SOURCE_DIR}/Libs/ctkExport.h.in")
 #-----------------------------------------------------------------------------
 # Add CTK library subdirectories
 #
+
+
+find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets Xml Network)
+set(QT_LIBRARIES Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Xml Qt5::Network)
+
 foreach(lib ${CTK_LIBS})
   if(CTK_LIB_${lib})
     add_subdirectory(Libs/${lib})

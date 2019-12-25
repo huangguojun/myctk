@@ -47,9 +47,8 @@ set(PLUGIN_resources
 #Compute the plugin dependencies
 ctkFunctionGetTargetLibraries(PLUGIN_target_libraries)
 
-if(CTK_QT_VERSION VERSION_GREATER "4")
-  list(APPEND PLUGIN_target_libraries Qt5::Network Qt5::Widgets)
-endif()
+list(APPEND PLUGIN_target_libraries Qt5::Network Qt5::Widgets Qt5::Xml)
+list(APPEND PLUGIN_target_libraries ${QT_LIBRARIES})
 
 ctkMacroBuildPlugin(
   NAME ${PROJECT_NAME}
@@ -58,7 +57,7 @@ ctkMacroBuildPlugin(
   MOC_SRCS ${PLUGIN_MOC_SRCS}
   UI_FORMS ${PLUGIN_UI_FORMS}
   RESOURCES ${PLUGIN_resources}
-  TARGET_LIBRARIES ${PLUGIN_target_libraries}
+  TARGET_LIBRARIES ${PLUGIN_target_libraries} 
 )
 
 if(BUILD_TESTING)
