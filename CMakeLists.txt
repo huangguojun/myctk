@@ -624,10 +624,26 @@ endforeach()
 
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
+try_compile(RESULT_VAR ${CTK_BINARY_DIR}/Utilities/DGraph ${CTK_SOURCE_DIR}/Utilities/DGraph
+              DGraph
+              CMAKE_FLAGS
+                -DCMAKE_OSX_ARCHITECTURES:STRING=${CMAKE_OSX_ARCHITECTURES}
+                -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=${CMAKE_OSX_DEPLOYMENT_TARGET}
+                -DCMAKE_OSX_SYSROOT:STRING=${CMAKE_OSX_SYSROOT}
+                -DCMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
+              OUTPUT_VARIABLE output)
+if(NOT RESULT_VAR)
+  message(FATAL_ERROR "Failed to compile DGraph application.\n${output}")
+endif()
 find_program(DGraph_EXECUTABLE DGraph
   "${CTK_BINARY_DIR}/Utilities/DGraph/"
-  )
+  "${CTK_BINARY_DIR}/Utilities/DGraph/bin/"
+  "${CTK_BINARY_DIR}/Utilities/DGraph/Debug/"
+  "${CTK_BINARY_DIR}/Utilities/DGraph/Release/")
 mark_as_advanced(DGraph_EXECUTABLE)
+
+ctkFunctionGenerateDGraphInput(${CTK_BINARY_DIR} "${target_directories}")
+ctkFunctionGenerateDGraphInput(${CTK_BINARY_DIR} "${target_directories}" WITH_EXTERNALS)
 ctkMacroValidateBuildOptions("${CTK_BINARY_DIR}" "${DGraph_EXECUTABLE}" "${target_directories}")
 
 
