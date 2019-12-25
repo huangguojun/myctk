@@ -1,23 +1,23 @@
-project(ctkEventBusDemo)
+project(ctkApp)
 
 #
 # See CTK/CMake/ctkMacroBuildApp.cmake for details
 #
 
 set(KIT_SRCS
-  ctkEventBusDemoMain.cpp
-  ctkEventBusDemoMainWindow.cpp
-  ctkEventBusDemoMainWindow.h
+  ctkAppMain.cpp
+  ctkAppMainWindow.cpp
+  ctkAppMainWindow.h
 )
 
 # Headers that should run through moc
 set(KIT_MOC_SRCS
-  ctkEventBusDemoMainWindow.h
+  ctkAppMainWindow.h
 )
 
 # UI files
 set(KIT_UI_FORMS
-  ctkEventBusDemoMainWindow.ui
+  ctkAppMainWindow.ui
 )
 
 # Resources
@@ -43,7 +43,3 @@ ctkMacroBuildApp(
   RESOURCES ${KIT_resources}
   )
 
-# Testing
-if(BUILD_TESTING)
-#   add_subdirectory(Testing)
-endif()

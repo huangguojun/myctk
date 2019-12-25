@@ -397,12 +397,6 @@ ctk_lib_option(CommandLineModules/Backend/LocalProcess
 ctk_lib_option(CommandLineModules/Backend/FunctionPointer
                "Build the Command Line Module back-end for function pointers" OFF)
 
-#ctk_lib_option(XNAT/Core
-#               "Build the XNAT Core library" OFF)
-
-#ctk_lib_option(XNAT/Widgets
-#               "Build the XNAT Widgets library" OFF)
-
 # Save enabled CTK libraries in the cache to ensure expected player and translator
 # are enabled in "Libs/QtTesting".
 set(_enabled_libs)
@@ -532,7 +526,6 @@ ctk_plugin_option(org.commontk.plugingenerator.ui
                   "Build the org.commontk.plugingenerator.ui plugin." ON
                   CTK_APP_ctkPluginGenerator)
 
-# Plug-ins related to DICOM WG23 (Application Hosting)
 ctk_plugin_option(org.commontk.dah.core "Build the org.commontk.dah.core plugin." ON)
 ctk_plugin_option(org.commontk.dah.hostedapp "Build the org.commontk.dah.hostedapp plugin." ON
                   CTK_ENABLE_DICOMApplicationHosting)
@@ -550,6 +543,10 @@ ctk_plugin_option(org.commontk.dah.cmdlinemoduleapp
 ctk_plugin_option(org.commontk.dah.examplehost
                   "Build the org.commontk.dah.examplehost plugin." ON
                   CTK_APP_ctkExampleHost)
+
+#ctk_plugin_option(org.commontk.eventbus
+#                  "Build the org.commontk.eventbus plugin." ON
+#                  CTK_APP_ctkEventBusDemo)
 
 
 # Add the PluginsContrib repo to the build system
@@ -657,7 +654,7 @@ set(CTK_DEPENDENCIES
 #  DCMTK
 #  ZMQ
    QtSOAP
-#  qxmlrpc
+#   qxmlrpc
 #  qRestAPI
 #  OpenIGTLink
 #  ITK
@@ -806,21 +803,14 @@ set(CTK_EXPORT_HEADER_TEMPLATE "${CTK_SOURCE_DIR}/Libs/ctkExport.h.in")
 #
 
 
-find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets Xml Network)
-set(QT_LIBRARIES Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Xml Qt5::Network)
-
 foreach(lib ${CTK_LIBS})
   if(CTK_LIB_${lib})
-    add_subdirectory(Libs/${lib})
-  endif()
-  # Always add the Documentation sub-directory for additional processing
-  if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/Libs/${lib}/Documentation/CMakeLists.txt)
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Libs/${lib}/Documentation)
+   add_subdirectory(Libs/${lib})
   endif()
 endforeach()
 
-# Add the CommandLineModules root directory for additional processing
 add_subdirectory(Libs/CommandLineModules)
+
 
 #-----------------------------------------------------------------------------
 # Add CTK plugin subdirectories
@@ -849,6 +839,6 @@ endforeach()
 #-----------------------------------------------------------------------------
 # Add general purpose subdirectories
 #
-add_subdirectory( Documentation )
+add_subdirectory(Documentation)
 add_subdirectory(CMake/LastConfigureStep)
 
