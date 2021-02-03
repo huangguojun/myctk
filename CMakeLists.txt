@@ -61,7 +61,7 @@ mark_as_superbuild(
 #-----------------------------------------------------------------------------
 # Superbuild Option - Enabled by default
 #
-option(CTK_SUPERBUILD "Build ${PROJECT_NAME} and the projects it depends on." ON)
+option(CTK_SUPERBUILD "Build ${PROJECT_NAME} and the projects it depends on." OFF)
 mark_as_advanced(CTK_SUPERBUILD)
 
 #-----------------------------------------------------------------------------
@@ -658,7 +658,7 @@ set(CTK_DEPENDENCIES
 #  qRestAPI
 #  OpenIGTLink
 #  ITK
-#  QtTesting
+   QtTesting
   )
 
 
